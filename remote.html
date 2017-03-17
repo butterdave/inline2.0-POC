@@ -1,0 +1,44 @@
+<html>
+<head>
+  <title>Inline 2.0 POC - Remote</title>
+
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.1.1/jquery.min.js"></script>
+
+</head>
+<body>
+
+  <script>
+    var content = 'When Jay Baruchel was a kid - a skinny little half-Jewish half-Irish Catholic kid in a rough part ' +
+      'of Montreal, where he had a knife pulled on him on the first day of seventh grade and carried a Swiss Army ' +
+      'knife the rest of the year, always worried he’d pull out a fork if he had to use it — his dad wanted him to ' +
+      'play hockey. His dad was not a big guy either, but Serge Baruchel was a fighter, boy. Serge Baruchel was a ' +
+      'skinny Paris-born son of Italian-speaking Egyptian Jews who moved to a non-Jewish part of Montreal, and he ' +
+      'was fighting his whole life.';
+
+    increaseContent = function() {
+      $('#stuff').show();
+      $('#stuff').append(content);
+
+      var heightOfDiv = $('#stuff').height() + 50;
+      var newHeight = heightOfDiv;
+      if (heightOfDiv > window.innerHeight) {
+        newHeight = window.innerHeight + (heightOfDiv - window.innerHeight);
+      }
+
+      parent.postMessage(JSON.stringify({action: 'resize', height: newHeight}), '*');
+    };
+  </script>
+
+  <button onClick="parent.postMessage(JSON.stringify({action: 'resize', height: window.innerHeight - 100}), '*');">Decrease</button>
+  <button onClick="parent.postMessage(JSON.stringify({action: 'resize', height: window.innerHeight + 100}), '*');">Increase</button>
+  <button onClick="increaseContent()">Add Page Content</button>
+  <button onClick="parent.postMessage(JSON.stringify({action: 'transactionComplete'}), '*');">
+    Simulate End Of Transaction
+  </button>
+
+  <div id="stuff"></div>
+  <script>
+    $('#stuff').hide();
+  </script>
+</body>
+</html>
